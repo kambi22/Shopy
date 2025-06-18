@@ -1,6 +1,6 @@
-import React from "react"
 
 const ProductsList = (props) => {
+  console.log("app from fire base", app)
   return (
     <div>
       productsList

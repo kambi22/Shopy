@@ -9,6 +9,8 @@ const SidebarContext = ({children}) => {
         const [open, setOpen] = useState(null);
         const [drawerWidth, setDrawerWidth] = useState(280);
          const theme = useTheme()
+         
+         
         
         
           const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Paper, Stack } from "@mui/material";
+import { Box, Typography, Paper, Stack, Container } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import StoreIcon from "@mui/icons-material/Store";
 import { useNavigate } from "react-router-dom";
@@ -14,11 +14,14 @@ const ChooseProfile = () => {
       alignItems="center"
       justifyContent="center"
       sx={{
-        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)", // Soft blue/gray gradient
+        // background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)", // Soft blue/gray gradient
         py: 8,
       }}
 
     >
+      <Container>
+
+     
       <Stack direction={{ xs: "column", sm: "row" }} spacing={6}>
         {/* User Card */}
         <Paper
@@ -38,11 +41,11 @@ const ChooseProfile = () => {
             },
             background: "linear-gradient(135deg, #e0c3fc 0%,rgb(67, 146, 224) 100%)",
           }}
-          onClick={() => navigate("/login?role=user")}
+          onClick={() => navigate("/login?role=customer")}
         >
           <PersonIcon sx={{ fontSize: 60, color: "#fff", mb: 2 }} />
           <Typography variant="h6" fontWeight="bold" mb={1}>
-            User
+            Customer
           </Typography>
           <Typography variant="body2" color="#fff">
             Shop, explore, and enjoy exclusive deals as a valued customer.
@@ -77,6 +80,7 @@ const ChooseProfile = () => {
           </Typography>
         </Paper>
       </Stack>
+       </Container>
     </Box>
   );
 };

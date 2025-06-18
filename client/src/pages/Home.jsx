@@ -91,7 +91,7 @@ const HomePage = () => {
 
 
       {/* Featured Products Section */}
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" className='' >
         <Box textAlign="center" mb={4}>
           <Typography
             variant="h3"
@@ -116,10 +116,10 @@ const HomePage = () => {
         {loading ? (
           <Grid spacing={3}>
             {[...Array(4)].map((_, index) => (
-              <Grid size={{ xl: 4, md: 4, sm: 6, xs: 12 }} key={index}>
+              <Grid size={{xl:4, md: 6, sm:6, xs:12}}  key={index}>
                 <Box
                   sx={{
-                    width: '100%',
+                    
                     height: 400,
                     backgroundColor: '#f5f5f5',
                     borderRadius: 1,
@@ -138,7 +138,7 @@ const HomePage = () => {
             {featuredProducts.map((product) => (
               <Grid item size={{xl:4, md: 6, sm:6, xs:12}} key={product.id}>
                 <Box
-                  className="bg-amber-600"
+                  className=""
                   role="button"
                   tabIndex={0}
                   sx={{ cursor: 'pointer' }}
@@ -169,7 +169,7 @@ const HomePage = () => {
       </Container>
 
       {/* New Arrivals Section */}
-      <Box sx={{ backgroundColor: '#f8f9fa', py: 6 }}>
+      <Box sx={{ backgroundColor: '#fff', py: 6 }}>
         <Container maxWidth="lg">
           <Box textAlign="center" mb={4}>
             <Typography

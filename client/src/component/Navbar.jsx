@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -11,9 +11,12 @@ import Box from "@mui/material/Box";
 import { styled, alpha } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { SideContext } from "../context/SidebarContext";
-import shopy from '../assets/shopy.png'; // Assuming you have a logo image
-// Styled search bar
+import shopy from '../assets/shopyl.png'; // Assuming you have a logo image
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import Profile from "../pages/Profile";
+import { getAuth } from "firebase/auth";
+import app from "../firebaseConfig";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -54,13 +57,33 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar = () => {
+  const [currentUser, setCurrentUser] = useState(null); // Initialize as null
+  const auth = getAuth(app);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      setCurrentUser(user);
+      // console.log("User data:", user); // Debugging line
+    });
+    return () => unsubscribe(); // Cleanup on unmount
+  }, [auth]);
+
   const {
     handleMobile,
     isSmallScreen
   } = useContext(SideContext);
 
   return (
-    <AppBar position="static"  elevation={4} sx={{ background: "linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%)" }}>
+    <AppBar position="static" elevation={4} sx={{ background: "linear-gradient(90deg, #fbc2eb 0%, #a18cd1  100%)" }}>
       <Toolbar>
         {/* Sidebar Menu Icon */}
         <IconButton
@@ -86,8 +109,7 @@ const Navbar = () => {
         </Box>
 
         {/* Search Bar */}
-        <Search sx={{ flexGrow: 1, maxWidth: 350, mx: 2 , }}
-        className="hidden md:block" >
+        <Search sx={{ flexGrow: 1, maxWidth: 350, mx: 2 }} className="hidden md:block">
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -100,28 +122,46 @@ const Navbar = () => {
         {/* Spacer */}
         <Box sx={{ flexGrow: 1 }} />
 
-        {/* Login Button */}
-        <Button
-          component={Link}
-          to="/choose-profile"
-          variant="outlined"
-          color="inherit"
-          sx={{
-            mr: 2,
-            borderColor: "#fff",
-            color: "#fff",
-            "&:hover": { borderColor: "#fff", background: alpha("#fff", 0.1) }
-          }}
-        >
-          Login
-        </Button>
+        {/* Login/Profile Button */}
+        {currentUser ? (
+          // Profile Button and Dropdown
+          <div>
+            <IconButton onClick={handleClick} color="inherit">
+              {currentUser.photoURL && currentUser.displayName ? (
+                <Avatar alt={currentUser.displayName} src={currentUser.photoURL} />
+              ) : currentUser.displayName ? (
+                <Avatar alt="Profile">{currentUser.displayName[0]}</Avatar>
+              ) : (
+                <Avatar alt="Profile">U</Avatar>
+              )}
+            </IconButton>
+            {/* Profile Dropdown */}
+            <Profile
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              handleClose={handleClose}
+              currentUser={currentUser}
+            />
+          </div>
+        ) : (
+          <Button
+            component={Link}
+            to="/choose-profile"
+            variant="outlined"
+            color="inherit"
+            sx={{
+              mr: 2,
+              borderColor: "#fff",
+              color: "#fff",
+              "&:hover": { borderColor: "#fff", background: alpha("#fff", 0.1) }
+            }}
+          >
+            Login
+          </Button>
+        )}
 
-        {/* Profile Button */}
-        {/* <IconButton component={Link} to="/profile" color="inherit">
-          <Avatar alt="Profile" src={shopy} />
-        </IconButton> */}
         <IconButton component={Link} to="/add-to-cart" color="inherit">
-          <AddShoppingCartIcon/>
+          <AddShoppingCartIcon />
         </IconButton>
       </Toolbar>
     </AppBar>

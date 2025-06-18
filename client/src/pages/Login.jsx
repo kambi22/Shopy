@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+
+
 import {
   Box,
   Card,
@@ -21,21 +23,83 @@ import {
   Google,
   Facebook
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import app from '../firebaseConfig'; // Adjust the import path as needed
+import { notify } from '../component/Notify';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  
+
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  
+
   const navigate = useNavigate();
+  const role = useSearchParams()[0].get('role') || 'customer'; // Get role from URL paramsq
+  // const { role } = useParams(); // If using URL params instead of search params
+  console.log("Role from URL:", role); // Debugging line
+
+
+  // Login.jsx (simplified logic)
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  const facebookProvider = new FacebookAuthProvider();
+
+  // Optional: Add custom scopes or parameters
+  googleProvider.setCustomParameters({
+    prompt: "select_account"
+  });
+
+  // Login.jsx (simplified logic)
+
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      console.log("Google Sign-In User:", user);
+      // Check if user is already in Firestore
+
+       
+
+      // Save role in localStorage or app state
+      localStorage.setItem("userRole", role);
+      localStorage.setItem("uid", user.uid);
+
+      // Navigate to dashboard based on role
+      if (role === "merchant") {
+        navigate("/");
+      } else {
+        navigate("/");
+      }
+
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    }
+  };
+
+  // Add this function for Facebook sign-in
+  const signInWithFacebook = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      // Save role in localStorage or app state
+      localStorage.setItem("userRole", role);
+      localStorage.setItem("uid", user.uid);
+      // Navigate to dashboard based on role
+      navigate("/");
+    } catch (error) {
+      console.error("Facebook Sign-In Error:", error);
+      setSubmitError("Facebook Sign-In failed. Please try again.");
+    }
+  };
 
   // Email validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,7 +107,7 @@ const Login = () => {
   // Real-time validation
   const validateField = (name, value) => {
     let error = '';
-    
+
     switch (name) {
       case 'email':
         if (!value.trim()) {
@@ -52,7 +116,7 @@ const Login = () => {
           error = 'Please enter a valid email address';
         }
         break;
-        
+
       case 'password':
         if (!value) {
           error = 'Password is required';
@@ -60,18 +124,18 @@ const Login = () => {
           error = 'Password must be at least 6 characters long';
         }
         break;
-        
+
       default:
         break;
     }
-    
+
     return error;
   };
 
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -92,7 +156,7 @@ const Login = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate all fields
     const newErrors = {};
     Object.keys(formData).forEach(key => {
@@ -115,24 +179,23 @@ const Login = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Mock authentication logic
-      if (formData.email === 'admin@example.com' && formData.password === 'password123') {
-        setSubmitSuccess('Login successful! Redirecting...');
-        
-        // Store user data (in real app, use proper authentication)
-        localStorage.setItem('user', JSON.stringify({
-          email: formData.email,
-          name: 'Admin User'
-        }));
-        
+    signInWithEmailAndPassword(auth, formData.email, formData.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("User signed in:", user);
+     
+      
         // Redirect after success
-        setTimeout(() => {
+        localStorage.setItem("userRole", role);
+
+        
           navigate('/');
-        }, 1500);
-      } else {
-        setSubmitError('Invalid email or password. Try admin@example.com / password123');
-      }
+          notify('success', 'Login Successful', `Welcome back, ${user.displayName || 'User'}!`);
+      })
+      
+      
     } catch (error) {
       setSubmitError('Login failed. Please try again.');
     } finally {
@@ -153,26 +216,27 @@ const Login = () => {
 
   return (
     <Box
-    className="bg-purple-100"
+      className=""
       sx={{
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-  
+
         padding: 5
       }}
     >
-        
+
       <Card
         sx={{
           maxWidth: 500,
-          width: '100%',
-          boxShadow: 3,
-          borderRadius:'15px',
-          // background:'transparent'
-          
         
+          minWidth:'320px',
+          boxShadow: 3,
+          borderRadius: '15px',
+          // background:'transparent'
+
+
         }}
         className=''
       >
@@ -187,13 +251,13 @@ const Login = () => {
             </Typography>
           </Box>
 
-        {/* Success/Error Messages */}
+          {/* Success/Error Messages */}
           {submitSuccess && (
             <Alert severity="success" sx={{ mb: 2 }}>
               {submitSuccess}
             </Alert>
           )}
-          
+
           {submitError && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {submitError}
@@ -274,14 +338,14 @@ const Login = () => {
 
             {/* Submit Button */}
             <Button
-            className=' '
+              className='shadow-none bg-gradient-to-tl  to-purple-400 from-pink-400 hover:from-pink-500 hover:to-purple-500'
               type="submit"
               fullWidth
               variant="contained"
               size="large"
               disabled={loading}
-            
-              sx={{ mt: 2, mb: 2, py: 1.5,backgroundColor: 'purple', color: 'white' }}
+
+              sx={{ mt: 2, mb: 2, py: 1.5, backgroundColor: 'purple', color: 'white' }}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
@@ -303,7 +367,7 @@ const Login = () => {
                 fullWidth
                 variant="outlined"
                 startIcon={<Google />}
-                onClick={() => handleSocialLogin('Google')}
+                onClick={signInWithGoogle}
                 sx={{ py: 1.5 }}
               >
                 Google
@@ -312,7 +376,7 @@ const Login = () => {
                 fullWidth
                 variant="outlined"
                 startIcon={<Facebook />}
-                onClick={() => handleSocialLogin('Facebook')}
+                onClick={signInWithFacebook}
                 sx={{ py: 1.5 }}
               >
                 Facebook
@@ -335,7 +399,7 @@ const Login = () => {
               </Typography>
             </Box>
           </Box>
-         
+
         </CardContent>
       </Card>
     </Box>

@@ -36,7 +36,6 @@ const Routing = (props) => {
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/sign-up" element={<SignUp/>}/>
                     <Route path="/choose-profile" element={<ChooseProfile/>}/>
-                    <Route path="/profile" element={<Profile/>}/>
                     <Route path="/add-to-cart" element={<AddToCart/>}/>
                     <Route path="/*" element={<PageNotFound/>}/>
                     </Route>

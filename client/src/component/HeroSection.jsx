@@ -35,9 +35,10 @@ const HeroSection = ({ slides }) => {
 
   return (
     <Box
+    className='bg-amber-500 md:m-10 mt-4 text-start mb-5 md:rounded-2xl'
       sx={{
         position: 'relative',
-        height: { xs: '400px', md: '500px' },
+        height: { xs: '300px', md: '500px' },
         maxWidth: '100%',
         minWidth: '300px',
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${currentSlideData.image})`,
@@ -45,17 +46,18 @@ const HeroSection = ({ slides }) => {
         backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'center',
+        justifyContent:'start',
         color: 'white',
         transition: 'background-image 0.5s ease-in-out',
-        margin:'50px',
-        borderRadius: '10px',
+        
+        
       }}
     >
       <Container maxWidth="lg">
         <Box
           sx={{
             maxWidth: { xs: '100%', md: '50%' },
-            textAlign: { xs: 'center', md: 'left' }
+           
           }}
         >
           <Typography
