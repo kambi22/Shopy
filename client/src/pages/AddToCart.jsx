@@ -70,7 +70,7 @@ const AddToCartPage = () => {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <Box sx={{ py: 6, px: { xs: 2, md: 8 }, minHeight: "80vh", background: "#f7fafc" }}>
+    <Box sx={{ py: 6, px: { xs: 2, md: 8 }, minHeight: "80vh",}}>
       <Typography variant="h4" fontWeight="bold" mb={4}>
         Your Cart
       </Typography>

@@ -134,9 +134,7 @@ const Navbar = () => {
           // Profile Button and Dropdown
           <div>
             <IconButton onClick={handleClick} color="inherit">
-              {currentUser.photoURL && currentUser.displayName ? (
-                <Avatar alt={currentUser.displayName} src={currentUser.photoURL} />
-              ) : currentUser.displayName ? (
+              {currentUser.displayName ? (
                 <Avatar alt="Profile">{currentUser.displayName[0]}</Avatar>
               ) : (
                 <Avatar alt="Profile">U</Avatar>
@@ -170,6 +168,7 @@ const Navbar = () => {
         <IconButton component={Link} to="/add-to-cart" color="inherit">
           <AddShoppingCartIcon />
         </IconButton>
+        
       </Toolbar>
     </AppBar>
   );

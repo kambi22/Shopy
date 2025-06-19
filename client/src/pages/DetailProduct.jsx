@@ -26,7 +26,8 @@ import {
   Alert,
   Badge,
   ButtonGroup,
-  useMediaQuery
+  useMediaQuery,
+  CircularProgress
 } from '@mui/material';
 import {
   FavoriteOutlined,
@@ -40,8 +41,8 @@ import {
   Security,
   Replay,
   Star,
-  StarBorder,
-  NavigateNext
+
+
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -233,10 +234,13 @@ const DetailProduct = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-          <LinearProgress sx={{ width: '100%', maxWidth: 400 }} />
+      <Container maxWidth='xl' className='h-screen'>
+        <Box display="flex" justifyContent="center" alignItems="center" >
+          <LinearProgress sx={{ width: '100%', top:'0px',color:'purple' }} />
         </Box>
+       
+          <CircularProgress   sx={{ width: '50px', height:'50px', marginTop:'30%', color:'purple' }} />
+        
       </Container>
     );
   }

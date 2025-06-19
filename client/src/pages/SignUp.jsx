@@ -9,9 +9,12 @@ import {
   Divider,
   Alert,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Link
 } from "@mui/material";
-import { Google, Facebook, Visibility, VisibilityOff } from "@mui/icons-material";
+import { ImFacebook2 } from "react-icons/im";
+import { FcGoogle } from "react-icons/fc";
+import {  Visibility, VisibilityOff } from "@mui/icons-material";
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
 import app from "../firebaseConfig"; // Adjust path as needed
 import { useNavigate, useSearchParams } from "react-router";
@@ -211,24 +214,39 @@ const SignUp = () => {
         <Stack spacing={1.5}>
           <Button
             fullWidth
-            variant="outlined"
-            startIcon={<Google />}
+            variant='contained'
+            
+            startIcon={<FcGoogle className="" />}
             onClick={handleGoogleSignIn}
-            sx={{ py: 1.5 }}
+            sx={{ py: 1.5, backgroundColor:'white', color:'inherit' }}
           >
             Sign up with Google
           </Button>
           <Button
             fullWidth
-            variant="outlined"
-            startIcon={<Facebook />}
+            variant="contained"
+            className="bg-blue-500 text-white"
+            startIcon={<ImFacebook2 className="bg-white text-blue-600 rounded-2xl" />}
             onClick={handleFacebookSignIn}
             sx={{ py: 1.5 }}
           >
             Sign up with Facebook
           </Button>
         </Stack>
-       
+        <Box textAlign="center" className='mt-3'>
+              <Typography variant="body2" color="text.secondary">
+                if already have an account?{' '}
+                <Link
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(`/login?role=${role}`); // Navigate to signup with role
+                  }}
+                >
+                  login here
+                </Link>
+              </Typography>
+            </Box>
       </Paper>
     </Box>
   );

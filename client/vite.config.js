@@ -44,11 +44,6 @@ export default defineConfig({
     })
   ],
   server: {
-    port: 5173, // or your preferred port
     host: true,
-    strictPort: true,
-    hmr: {
-      clientPort: 443 // For ngrok HTTPS
-    }
   }
 })

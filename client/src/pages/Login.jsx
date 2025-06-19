@@ -20,14 +20,15 @@ import {
   VisibilityOff,
   Email,
   Lock,
-  Google,
-  Facebook
+ 
 } from '@mui/icons-material';
+import { FcGoogle } from "react-icons/fc";
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import app from '../firebaseConfig'; // Adjust the import path as needed
 import { notify } from '../component/Notify';
+import { ImFacebook } from 'react-icons/im';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -366,17 +367,19 @@ const Login = () => {
             <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
               <Button
                 fullWidth
-                variant="outlined"
-                startIcon={<Google />}
+                variant="contained"
+                
+                startIcon={<FcGoogle />}
                 onClick={signInWithGoogle}
-                sx={{ py: 1.5 }}
+                sx={{ py: 1.5, backgroundColor:'white', color:'black' }}
               >
                 Google
               </Button>
               <Button
                 fullWidth
-                variant="outlined"
-                startIcon={<Facebook />}
+                variant="contained"
+              className="bg-blue-500 text-white"
+              startIcon={<ImFacebook className="bg-white text-blue-600 rounded-2xl" />}
                 onClick={signInWithFacebook}
                 sx={{ py: 1.5 }}
               >

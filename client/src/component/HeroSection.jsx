@@ -35,7 +35,7 @@ const HeroSection = ({ slides }) => {
 
   return (
     <Box
-    className='bg-amber-500 md:m-10 mt-4 text-start mb-5 md:rounded-2xl'
+    className=' md:m-10 mt-4 text-start mb-5 md:rounded-2xl'
       sx={{
         position: 'relative',
         height: { xs: '300px', md: '500px' },

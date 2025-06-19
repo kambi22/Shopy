@@ -8,7 +8,7 @@ const Footer = () => {
       sx={{
         background: "linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%)",
         color: "#fff",
-       
+    
       }}
     >
       <Grid container spacing={4} justifyContent="center">
