@@ -34,7 +34,7 @@ const Routing = (props) => {
                     <Route path="/detail-product/:id" element={<DetailProduct/>}/>
                     <Route path="/product-list" element={<ProductsList/>}/>
                     <Route path="/login" element={<Login/>}/>
-                    <Route path="/sign-up" element={<SignUp/>}/>
+                    <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/choose-profile" element={<ChooseProfile/>}/>
                     <Route path="/add-to-cart" element={<AddToCart/>}/>
                     <Route path="/*" element={<PageNotFound/>}/>

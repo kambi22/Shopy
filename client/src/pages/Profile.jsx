@@ -53,7 +53,9 @@ const Profile = ({handleClose, currentUser, anchorEl}) => {
       icon: 'warning',
       title: 'Logout',
       text: 'Are you sure you want to Logout',
-      showConfirmButton: true
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Logout',
     }).then((resp) => {
       if (resp.isConfirmed) {
        console.log('Logout confirmed');

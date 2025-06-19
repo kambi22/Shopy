@@ -230,8 +230,9 @@ const Login = () => {
       <Card
         sx={{
           maxWidth: 500,
-        
-          minWidth:'320px',
+       
+          minWidth:'350px',
+          
           boxShadow: 3,
           borderRadius: '15px',
           // background:'transparent'
@@ -391,7 +392,7 @@ const Login = () => {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate('/register');
+                    navigate(`/signup?role=${role}`); // Navigate to signup with role
                   }}
                 >
                   Sign up here

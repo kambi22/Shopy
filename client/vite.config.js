@@ -17,8 +17,8 @@ export default defineConfig({
         start_url: '/',
         display: 'standalone',
         description: 'welcome to Shopy, your online shopping companion',
-        theme_color: '#4be863',//green
-        background_color: '#f9f9f9',//green
+        theme_color: '#fbc2eb', // light purple
+        background_color: '#fbc2eb', // light purple
         icons: [
           {
             src: 'web-app-manifest-192x192.png',
@@ -30,10 +30,9 @@ export default defineConfig({
             type: 'image/png',
             sizes: '512x512'
           },
-         
         ]
       },
-        workbox: {
+      workbox: {
         // Cache strategies
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
       },
@@ -44,9 +43,8 @@ export default defineConfig({
       },
     })
   ],
-   server: {
+  server: {
     port: 5173, // or your preferred port
-   
     host: true,
     strictPort: true,
     hmr: {

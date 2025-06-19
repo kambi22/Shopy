@@ -83,7 +83,14 @@ const Navbar = () => {
   } = useContext(SideContext);
 
   return (
-    <AppBar position="static" elevation={4} sx={{ background: "linear-gradient(90deg, #fbc2eb 0%, #a18cd1  100%)" }}>
+    
+<AppBar position="static" elevation={4} sx={{ 
+  background: {
+    xs: "linear-gradient(180deg, #fbc2eb 0%, #a18cd1 100%)",
+    sm: "linear-gradient(180deg, #fbc2eb 0%, #a18cd1 100%)", 
+    md: "linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%)"
+  }
+}}>
       <Toolbar>
         {/* Sidebar Menu Icon */}
         <IconButton

@@ -10,7 +10,7 @@ function App() {
   
 
   return (
-   <div className="bg-gradient-to-tl  to-purple-100 from-white">
+   <div className="bg-gradient-to-tl  to-white from-purple-100 ">
     <PWAInstallPrompt/>
     <Routing/>
    </div>
