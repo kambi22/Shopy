@@ -130,25 +130,7 @@ const Navbar = () => {
         <Box sx={{ flexGrow: 1 }} />
 
         {/* Login/Profile Button */}
-        {currentUser ? (
-          // Profile Button and Dropdown
-          <div>
-            <IconButton onClick={handleClick} color="inherit">
-              {currentUser.displayName ? (
-                <Avatar alt="Profile">{currentUser.displayName[0]}</Avatar>
-              ) : (
-                <Avatar alt="Profile">U</Avatar>
-              )}
-            </IconButton>
-            {/* Profile Dropdown */}
-            <Profile
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              handleClose={handleClose}
-              currentUser={currentUser}
-            />
-          </div>
-        ) : (
+        {!currentUser && (
           <Button
             component={Link}
             to="/choose-profile"
@@ -168,6 +150,25 @@ const Navbar = () => {
         <IconButton component={Link} to="/add-to-cart" color="inherit">
           <AddShoppingCartIcon />
         </IconButton>
+          {currentUser && (
+          // Profile Button and Dropdown
+          <div>
+            <IconButton size='small' className="" onClick={handleClick} color="inherit">
+              {currentUser.displayName ? (
+                <Avatar  sx={{height:'30px', width:'30px'}} alt="Profile">{currentUser.displayName[0]}</Avatar>
+              ) : (
+                <Avatar sx={{height:'30px', width:'30px'}} alt="Profile">U</Avatar>
+              )}
+            </IconButton>
+            {/* Profile Dropdown */}
+            <Profile
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              handleClose={handleClose}
+              currentUser={currentUser}
+            />
+          </div>
+        ) }
         
       </Toolbar>
     </AppBar>

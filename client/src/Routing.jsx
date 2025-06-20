@@ -28,7 +28,7 @@ const Routing = (props) => {
                     <Route path="/" element={<MainLayout/>}>
                     <Route path="/" index element={<Home/>}/>
                     <Route path="/products" element={<Products/>}/>
-                    <Route path="/add-produt" element={<AddProduct/>}/>
+                    <Route path="/add-product" element={<AddProduct/>}/>
                     <Route path="/edit-product" element={<EditProduct/>}/>
                     <Route path="/delete-product" element={<DeleteProduct/>}/>
                     <Route path="/detail-product/:id" element={<DetailProduct/>}/>

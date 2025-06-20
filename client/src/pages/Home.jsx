@@ -92,13 +92,15 @@ const HomePage = () => {
 
       {/* Featured Products Section */}
       <Container maxWidth="lg" className='' >
-        <Box textAlign="center" mb={4}>
+        <Box textAlign="center" sx={{color:'black'}} mb={4}>
           <Typography
+          className='text-black'
             variant="h3"
             component="h2"
             sx={{
               fontSize: { xs: '2rem', md: '2.5rem' },
               fontWeight: 600,
+              color: 'black',
               mb: 2
             }}
           >

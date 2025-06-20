@@ -175,14 +175,14 @@ const Profile = ({handleClose, currentUser, anchorEl}) => {
             </MenuItem>
           ) : (
             <>
-              <MenuItem className="rounded-3" onClick={() => handleMenuAction('add-product')}>
+              <MenuItem className="rounded-3" onClick={() => navigate('/add-product')}>
                 <ListItemIcon>
                   <AddToPhotos fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Add Product</ListItemText>
               </MenuItem>
 
-              <MenuItem className="rounded-3" onClick={() => handleMenuAction('edit-product')}>
+              <MenuItem className="rounded-3" onClick={() => navigate('/edit-product')}>
                 <ListItemIcon>
                   <Edit fontSize="small" />
                 </ListItemIcon>
