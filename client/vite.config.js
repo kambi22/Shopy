@@ -18,7 +18,7 @@ export default defineConfig({
         display: 'standalone',
         description: 'welcome to Shopy, your online shopping companion',
         theme_color: '#fbc2eb', // light purple
-        background_color: '#fbc2eb', // light purple
+        background_color: '#fff', // white
         icons: [
           {
             src: 'web-app-manifest-192x192.png',

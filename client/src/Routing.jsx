@@ -15,6 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import AddToCart from "./pages/AddToCart";
 import MainLayout from "./layout/MainLayout";
 import SidebarContext from "./context/SidebarContext";
+import About from "./pages/About";
 
 
 const Routing = (props) => {
@@ -37,6 +38,7 @@ const Routing = (props) => {
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/choose-profile" element={<ChooseProfile/>}/>
                     <Route path="/add-to-cart" element={<AddToCart/>}/>
+                    <Route path="/about" element={<About/>}/>
                     <Route path="/*" element={<PageNotFound/>}/>
                     </Route>
                 </Routes>

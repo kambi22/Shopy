@@ -13,7 +13,7 @@ const MainLayout = (props) => {
       <Sidebar className="w-64 shrink-0" /> {/* Fixed width, won't shrink */}
       <div className="flex-none grow w-90 ">{/*  grow take all remaining width*/}
         <Navbar />
-        <div className=" h-full">
+        <div className=" h-sxcreen overflow-y-auto ">
           <Outlet />
         </div>
         <Footer />

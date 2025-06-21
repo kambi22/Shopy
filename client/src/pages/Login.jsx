@@ -29,7 +29,7 @@ import { getFirestore } from 'firebase/firestore';
 import app from '../firebaseConfig'; // Adjust the import path as needed
 import { notify } from '../component/Notify';
 import { ImFacebook } from 'react-icons/im';
-
+import loginbg from '../assets/loginbg.png'
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -223,8 +223,11 @@ const Login = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-
-        padding: 5
+        padding: 5,
+        backgroundImage: `url(${loginbg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
       }}
     >
 

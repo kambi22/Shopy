@@ -48,7 +48,7 @@ export default function Sidebar() {
   };
   const GradientDrawer = styled(Drawer)(() => ({
     '& .MuiPaper-root': {
-      background: smallScreen ? "linear-gradient(180deg, #fbc2eb 0%, #a18cd1 100%)" : "linear-gradient(90deg, #a18cd1 0%,  #fbc2eb 100%)",
+      background: smallScreen ? "linear-gradient(180deg, #a18cd1 0%,  #fbc2eb 100%)" : "linear-gradient(90deg, #a18cd1 0%,  #fbc2eb 100%)",
       color: '#fff',
       transition: 'width 0.1s',
       easing: easing.easeInOut,

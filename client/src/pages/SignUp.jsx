@@ -19,7 +19,7 @@ import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, FacebookAu
 import app from "../firebaseConfig"; // Adjust path as needed
 import { useNavigate, useSearchParams } from "react-router";
 import { notify } from "../component/Notify";
-
+import singbg from '../assets/singbg.png'
 const auth = getAuth(app);
 
 const SignUp = () => {
@@ -120,7 +120,20 @@ const SignUp = () => {
   };
 
   return (
-    <Box minHeight="80vh" display="flex" alignItems="center" justifyContent="center" >
+     <Box
+          className=""
+          sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 5,
+            backgroundImage: `url(${singbg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
       <Paper elevation={6} sx={{ p: 4,maxWidth:500, minWidth: 340, borderRadius: 3, margin:10}}>
         
                   {/* Header */}

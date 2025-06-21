@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import { styled, alpha } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { SideContext } from "../context/SidebarContext";
-import shopy from '../assets/shopyl.png'; // Assuming you have a logo image
+import shopy from '../assets/shopy.png'; // Assuming you have a logo image
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Profile from "../pages/Profile";
 import { getAuth } from "firebase/auth";
@@ -86,8 +86,8 @@ const Navbar = () => {
     
 <AppBar position="static" elevation={4} sx={{ 
   background: {
-    xs: "linear-gradient(180deg, #fbc2eb 0%, #a18cd1 100%)",
-    sm: "linear-gradient(180deg, #fbc2eb 0%, #a18cd1 100%)", 
+    xs: "linear-gradient(180deg, #a18cd1 0%,  #fbc2eb 100%)", 
+    sm: "linear-gradient(180deg, #a18cd1 0%,  #fbc2eb 100%)", 
     md: "linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%)"
   }
 }}>
@@ -106,6 +106,7 @@ const Navbar = () => {
         {/* Brand Logo */}
         <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
           <img
+          className="hover:rotate-12 transition-transform duration-500 cursor-pointer"
             src={shopy}
             alt="Brand Logo"
             style={{ width: 40, height: 40, borderRadius: "50%" }}
