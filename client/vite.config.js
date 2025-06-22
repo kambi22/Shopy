@@ -17,7 +17,7 @@ export default defineConfig({
         start_url: '/',
         display: 'standalone',
         description: 'welcome to Shopy, your online shopping companion',
-        theme_color: '#fbc2eb', // light purple
+        theme_color: '#a18cd1', // dark purple
         background_color: '#fff', // white
         icons: [
           {
