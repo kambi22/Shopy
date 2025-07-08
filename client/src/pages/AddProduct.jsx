@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -43,19 +43,23 @@ import {
   PhotoCamera as PhotoCameraIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
+import { getAuth } from 'firebase/auth';
+import app from '../firebaseConfig';
 
 const AddProduct = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
+  const auth = getAuth(app)
 
   const [formData, setFormData] = useState({
+    marchantName:'',
+    marchantEmail:'',
     name: '',
     brand: '',
     price: '',
     originalPrice: '',
     discount: '',
-    images: [],
     rating: '',
     totalReviews: '',
     category: '',
@@ -65,16 +69,7 @@ const AddProduct = () => {
     sku: '',
     description: '',
     features: [''],
-    specifications: {
-      'Driver Size': '',
-      'Frequency Response': '',
-      'Impedance': '',
-      'Battery Life': '',
-      'Charging Time': '',
-      'Weight': '',
-      'Connectivity': '',
-      'Warranty': ''
-    },
+
     colors: [{ name: '', value: '#000000', available: true }],
     sizes: ['One Size'],
     reviews: [{
@@ -88,6 +83,7 @@ const AddProduct = () => {
       helpful: 0
     }]
   });
+
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -106,6 +102,16 @@ const AddProduct = () => {
     'Automotive': ['Parts', 'Accessories', 'Tools', 'Care']
   };
 
+  
+
+    useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(user => {
+        setFormData({marchantName:user.displayName, marchantEmail:user.email})
+      });
+      return () => unsubscribe(); // Cleanup on unmount
+    }, [auth]);
+
+ 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -167,15 +173,7 @@ const AddProduct = () => {
     setImagePreviews(newPreviews);
   };
 
-  const handleSpecificationChange = (key, value) => {
-    setFormData(prev => ({
-      ...prev,
-      specifications: {
-        ...prev.specifications,
-        [key]: value
-      }
-    }));
-  };
+
 
   const handleArrayChange = (index, value, arrayName) => {
     setFormData(prev => ({
@@ -187,7 +185,7 @@ const AddProduct = () => {
   const addArrayItem = (arrayName, defaultValue) => {
     setFormData(prev => ({
       ...prev,
-      [arrayName]: [...prev[arrayName], defaultValue]
+      [arrayName]: Array.isArray(prev[arrayName]) ? [...prev[arrayName], defaultValue] : [defaultValue]
     }));
   };
 
@@ -211,78 +209,54 @@ const AddProduct = () => {
     setFormData(prev => ({
       ...prev,
       reviews: [{
-        ...prev.reviews[0],
+        ...(Array.isArray(prev.reviews) && prev.reviews[0] ? prev.reviews[0] : {}),
         [field]: value
       }]
     }));
   };
 
-  const uploadImagesToCloudinary = async (images) => {
-    const uploadedUrls = [];
+  
 
-    for (const image of images) {
-      const formData = new FormData();
-      formData.append('file', image);
-      formData.append('upload_preset', 'your_upload_preset'); // Replace with your Cloudinary upload preset
-
-      try {
-        const response = await axios.post(
-          'https://api.cloudinary.com/v1_1/dr5ziuzrg/image/upload', // Replace with your Cloudinary cloud name
-          formData
-        );
-        uploadedUrls.push(response.data.secure_url);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        throw new Error('Failed to upload images');
-      }
-    }
-
-    return uploadedUrls;
-  };
-
-  const checkingall = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
-    console.log('formdata:', formData);
-    console.log('selectedImages:', selectedImages);
-    console.log('imagePreviews:', imagePreviews);
-    console.log('categories:', categories);
-    console.log('subcategories:', subcategories);
-    setLoading(false);
-  };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
 
     try {
-      // Upload images first
-      let imageUrls = [];
-      if (selectedImages.length > 0) {
-        imageUrls = await uploadImagesToCloudinary(selectedImages);
+      if (!selectedImages.length) {
+        setMessage('Please select at least one image.');
+        setMessageType('error');
+        setLoading(false);
+        return;
       }
 
-      const productData = {
-        ...formData,
-        id: Date.now(),
-        images: imageUrls,
-        price: parseFloat(formData.price),
-        originalPrice: parseFloat(formData.originalPrice),
-        discount: parseFloat(formData.discount),
-        rating: parseFloat(formData.rating),
-        totalReviews: parseInt(formData.totalReviews),
-        stockCount: parseInt(formData.stockCount),
-        reviews: [{
-          ...formData.reviews[0],
-          id: 1,
-          rating: parseInt(formData.reviews[0].rating),
-          helpful: parseInt(formData.reviews[0].helpful)
-        }]
-      };
+      // Prepare FormData for multipart/form-data
+      const form = new FormData();
 
-      const response = await axios.post('http://localhost:5000/api/products', productData);
+      // Append images (as files)
+      selectedImages.forEach((img) => {
+        // If img is a File object, append directly
+        form.append('images', img);
+      });
+
+      // Append all other fields (convert objects/arrays to JSON string)
+      Object.entries(formData).forEach(([key, value]) => {
+        if (
+          typeof value === 'object' &&
+          value !== null &&
+          !(value instanceof File) &&
+          key !== 'images'
+        ) {
+          form.append(key, JSON.stringify(value));
+        } else {
+          form.append(key, value);
+        }
+      });
+
+      // Send to backend (make sure backend uses multer or similar to handle files)
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_API_URI}/add-product`,form);
 
       if (response.status === 201) {
         setMessage('Product added successfully!');
@@ -295,7 +269,6 @@ const AddProduct = () => {
           price: '',
           originalPrice: '',
           discount: '',
-          images: [],
           rating: '',
           totalReviews: '',
           category: '',
@@ -305,16 +278,7 @@ const AddProduct = () => {
           sku: '',
           description: '',
           features: [''],
-          specifications: {
-            'Driver Size': '',
-            'Frequency Response': '',
-            'Impedance': '',
-            'Battery Life': '',
-            'Charging Time': '',
-            'Weight': '',
-            'Connectivity': '',
-            'Warranty': ''
-          },
+         
           colors: [{ name: '', value: '#000000', available: true }],
           sizes: ['One Size'],
           reviews: [{
@@ -329,12 +293,11 @@ const AddProduct = () => {
           }]
         });
 
-        // Reset images
         setSelectedImages([]);
         setImagePreviews([]);
       }
     } catch (error) {
-      console.error('Error adding product:', error);
+      console.error('front-end Error adding product:', error);
       setMessage('Error adding product. Please try again.');
       setMessageType('error');
     } finally {
@@ -343,7 +306,7 @@ const AddProduct = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 }, marginBottom:'200px' }}>
       <Paper
         elevation={3}
         className='shadow-none'
@@ -383,7 +346,7 @@ const AddProduct = () => {
         </Alert>
       )}
 
-      <Box component="form" onSubmit={checkingall}>
+      <Box component="form" onSubmit={handleSubmit}>
         {/* Basic Information */}
         <Card sx={{ mb: 3, borderRadius: 3, overflow: 'hidden' }}>
           <CardContent sx={{ p: { xs: 2, md: 3 } }}>
@@ -723,7 +686,7 @@ const AddProduct = () => {
             </Box>
 
             <Stack spacing={2}>
-              {formData.features.map((feature, index) => (
+              {(formData.features || []).map((feature, index) => (
                 <Box key={index} sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                   <TextField
                     fullWidth
@@ -757,31 +720,7 @@ const AddProduct = () => {
           </CardContent>
         </Card>
 
-        {/* Specifications */}
-        {formData.category === 'Electronics' ? (
-          <Card sx={{ mb: 3, borderRadius: 3 }}>
-            <CardContent sx={{ p: { xs: 2, md: 3 } }}>
-              <Typography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
-                Specifications
-              </Typography>
-
-              <Grid container spacing={3}>
-                {Object.entries(formData.specifications).map(([key, value]) => (
-                  <Grid item size={{ xl: 3, md: 4, sm: 6, xs: 12 }} key={key}>
-                    <TextField
-                      fullWidth
-                      label={key}
-                      value={value}
-                      onChange={(e) => handleSpecificationChange(key, e.target.value)}
-                      variant="outlined"
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </CardContent>
-          </Card>
-        ) : null}
-
+     
 
         {/* Colors */}
         <Card sx={{ mb: 3, borderRadius: 3 }}>
@@ -794,7 +733,7 @@ const AddProduct = () => {
             </Box>
 
             <Stack spacing={2}>
-              {formData.colors.map((color, index) => (
+              {(formData.colors || []).map((color, index) => (
                 <Paper key={index} sx={{ p: 2, backgroundColor: 'grey.50' }}>
                   <Grid container spacing={2} alignItems="center">
                     <Grid item size={{ xl: 4, md: 4, sm: 6, xs: 12 }}>
@@ -911,7 +850,7 @@ const AddProduct = () => {
                 <TextField
                   fullWidth
                   label="Reviewer Name"
-                  value={formData.reviews[0].user}
+                  value={Array.isArray(formData.reviews) && formData.reviews[0] ? formData.reviews[0].user : ''}
                   onChange={(e) => handleReviewChange('user', e.target.value)}
                   variant="outlined"
                 />
@@ -922,7 +861,7 @@ const AddProduct = () => {
                   label="Review Rating (1-5)"
                   type="number"
                   inputProps={{ min: 1, max: 5 }}
-                  value={formData.reviews[0].rating}
+                      value={Array.isArray(formData.reviews) && formData.reviews[0] ? formData.reviews[0].rating : ''}
                   onChange={(e) => handleReviewChange('rating', e.target.value)}
                   variant="outlined"
                 />
@@ -932,7 +871,7 @@ const AddProduct = () => {
                   fullWidth
                   label="Review Date"
                   type="date"
-                  value={formData.reviews[0].date}
+                      value={Array.isArray(formData.reviews) && formData.reviews[0] ? formData.reviews[0].data : ''}
                   onChange={(e) => handleReviewChange('date', e.target.value)}
                   variant="outlined"
                   InputLabelProps={{ shrink: true }}
@@ -942,7 +881,7 @@ const AddProduct = () => {
                 <TextField
                   fullWidth
                   label="Review Title"
-                  value={formData.reviews[0].title}
+                      value={Array.isArray(formData.reviews) && formData.reviews[0] ? formData.reviews[0].title : ''}
                   onChange={(e) => handleReviewChange('title', e.target.value)}
                   variant="outlined"
                 />
@@ -951,7 +890,7 @@ const AddProduct = () => {
                 <TextField
                   fullWidth
                   label="Review Comment"
-                  value={formData.reviews[0].comment}
+                      value={Array.isArray(formData.reviews) && formData.reviews[0] ? formData.reviews[0].comment : ''}
                   onChange={(e) => handleReviewChange('comment', e.target.value)}
                   multiline
                   rows={3}
@@ -963,7 +902,7 @@ const AddProduct = () => {
                   fullWidth
                   label="Helpful Count"
                   type="number"
-                  value={formData.reviews[0].helpful}
+                     value={Array.isArray(formData.reviews) && formData.reviews[0] ? formData.reviews[0].helpful : ''}
                   onChange={(e) => handleReviewChange('helpful', e.target.value)}
                   variant="outlined"
                 />

@@ -20,7 +20,9 @@ import {
   Inventory,
   Settings,
   AddShoppingCart,
-  AddToPhotos
+  AddToPhotos,
+  List,
+  ListAlt
 } from '@mui/icons-material';
 import { SideContext } from '../context/SidebarContext';
 import { getAuth } from 'firebase/auth';
@@ -76,11 +78,7 @@ const Profile = ({handleClose, currentUser, anchorEl}) => {
   }
 
 
-  const handleMenuAction = (action) => {
-    console.log(`Action: ${action}`);
-    handleClose();
-    // Add your navigation logic here
-  };
+
 
   return (
     <Box>
@@ -167,7 +165,7 @@ const Profile = ({handleClose, currentUser, anchorEl}) => {
           </MenuItem>
 
           {role === 'customer' ? (
-            <MenuItem className="rounded-3" onClick={() => handleMenuAction('add-product')}>
+            <MenuItem className="rounded-3" onClick={() => navigate('/add-to-cart')}>
               <ListItemIcon>
                 <AddShoppingCart fontSize="small" />
               </ListItemIcon>
@@ -175,6 +173,12 @@ const Profile = ({handleClose, currentUser, anchorEl}) => {
             </MenuItem>
           ) : (
             <>
+              <MenuItem className="rounded-3" onClick={() => navigate('/marchant-product-list')}>
+                <ListItemIcon>
+                  <ListAlt fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>My Product List</ListItemText>
+              </MenuItem>
               <MenuItem className="rounded-3" onClick={() => navigate('/add-product')}>
                 <ListItemIcon>
                   <AddToPhotos fontSize="small" />
@@ -182,18 +186,7 @@ const Profile = ({handleClose, currentUser, anchorEl}) => {
                 <ListItemText>Add Product</ListItemText>
               </MenuItem>
 
-              <MenuItem className="rounded-3" onClick={() => navigate('/edit-product')}>
-                <ListItemIcon>
-                  <Edit fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Edit Product</ListItemText>
-              </MenuItem>
-              <MenuItem className="rounded-3" onClick={() => handleMenuAction('edit-product')}>
-                <ListItemIcon>
-                  <Delete fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Delete Product</ListItemText>
-              </MenuItem>
+             
             </>
           )}
 

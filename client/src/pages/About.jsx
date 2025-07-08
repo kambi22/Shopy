@@ -61,9 +61,9 @@ const About = () => {
 
   const teamMembers = [
     {
-      name: 'Sarah Johnson',
+      name: 'Satnam Singh',
       role: 'CEO & Founder',
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      image: 'https://res.cloudinary.com/dr5ziuzrg/image/upload/v1751882786/My_profile_sjdhtr.jpg',
       description: 'Visionary leader with 15+ years in e-commerce'
     },
     {

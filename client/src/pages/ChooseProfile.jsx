@@ -9,8 +9,8 @@ const ChooseProfile = () => {
 
   return (
     <Box
-      minHeight="70vh"
-      display="flex"
+      minHeight="100vh"
+     
       alignItems="center"
       justifyContent="center"
       sx={{
@@ -19,15 +19,30 @@ const ChooseProfile = () => {
       }}
 
     >
+        
       <Container>
 
-     
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={6}>
+     <Paper
+                  elevation={3}
+                  className='shadow-none'
+                  sx={{
+                    p: { xs: 2, md: 4 },
+                    borderRadius: 3,
+                    background: 'linear-gradient(135deg,rgb(162, 122, 230) 0%,rgb(242, 178, 247) 100%)',
+                    color: 'white',
+                    mb: 3
+                  }}
+                >
+                  <h3 className='text-2xl sm:text-4xl sm:font-bold'>Choose Profile</h3>
+                 
+                </Paper>
+      <Stack direction={{ xs: "column", sm: "row", }} sx={{marginTop:'100px'}} spacing={6}>
         {/* User Card */}
         <Paper
           elevation={8}
           sx={{
             p: 5,
+            width:'100%',
             borderRadius: 4,
             minWidth: 260,
             textAlign: "center",
@@ -57,7 +72,7 @@ const ChooseProfile = () => {
           sx={{
             p: 5,
             borderRadius: 4,
-            minWidth: 260,
+            width:'100%',
             textAlign: "center",
             cursor: "pointer",
             color: "#fff",

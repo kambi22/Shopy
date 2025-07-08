@@ -42,6 +42,7 @@ const ProductCard = ({ product, onAddToCart, onAddToWishlist, onQuickView }) => 
   return (
     <Card 
       sx={{ 
+  
         height: '100%',
         width: '100%',
         display: 'flex',
@@ -103,11 +104,12 @@ const ProductCard = ({ product, onAddToCart, onAddToWishlist, onQuickView }) => 
       <Box sx={{ position: 'relative', overflow: 'hidden' }}>
         <CardMedia
           component="img"
-          height="250"
-          image={product.image}
+         
+          image={product.images[0]}
           alt={product.name}
           onLoad={() => setImageLoaded(true)}
           sx={{
+            height:'300px',
             objectFit: 'cover',
             transition: 'transform 0.3s ease-in-out',
             opacity: imageLoaded ? 1 : 0,
@@ -183,7 +185,7 @@ const ProductCard = ({ product, onAddToCart, onAddToWishlist, onQuickView }) => 
       </Box>
 
       {/* Product Info */}
-      <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignContent:'start' }}>
         {/* Brand */}
         <Typography 
           variant="caption" 

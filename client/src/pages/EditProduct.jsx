@@ -58,7 +58,6 @@ const EditProduct = () => {
     price: '',
     originalPrice: '',
     discount: '',
-    images: [],
     rating: '',
     totalReviews: '',
     category: '',
@@ -68,33 +67,12 @@ const EditProduct = () => {
     sku: '',
     description: '',
     features: [''],
-    specifications: {
-      'Driver Size': '',
-      'Frequency Response': '',
-      'Impedance': '',
-      'Battery Life': '',
-      'Charging Time': '',
-      'Weight': '',
-      'Connectivity': '',
-      'Warranty': ''
-    },
     colors: [{ name: '', value: '#000000', available: true }],
     sizes: ['One Size'],
-    reviews: [{
-      id: 1,
-      user: '',
-      rating: 0,
-      date: '',
-      title: '',
-      comment: '',
-      verified: true,
-      helpful: 0
-    }]
+    
   });
 
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
-  const [existingImages, setExistingImages] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [message, setMessage] = useState('');
@@ -112,68 +90,23 @@ const EditProduct = () => {
   };
 
   // Fetch product data on component mount
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setFetchLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
-        const product = response.data;
-        
-        setFormData({
-          name: product.name || '',
-          brand: product.brand || '',
-          price: product.price?.toString() || '',
-          originalPrice: product.originalPrice?.toString() || '',
-          discount: product.discount?.toString() || '',
-          images: product.images || [],
-          rating: product.rating?.toString() || '',
-          totalReviews: product.totalReviews?.toString() || '',
-          category: product.category || '',
-          subcategory: product.subcategory || '',
-          inStock: product.inStock !== undefined ? product.inStock : true,
-          stockCount: product.stockCount?.toString() || '',
-          sku: product.sku || '',
-          description: product.description || '',
-          features: product.features?.length > 0 ? product.features : [''],
-          specifications: {
-            'Driver Size': product.specifications?.['Driver Size'] || '',
-            'Frequency Response': product.specifications?.['Frequency Response'] || '',
-            'Impedance': product.specifications?.['Impedance'] || '',
-            'Battery Life': product.specifications?.['Battery Life'] || '',
-            'Charging Time': product.specifications?.['Charging Time'] || '',
-            'Weight': product.specifications?.['Weight'] || '',
-            'Connectivity': product.specifications?.['Connectivity'] || '',
-            'Warranty': product.specifications?.['Warranty'] || ''
-          },
-          colors: product.colors?.length > 0 ? product.colors : [{ name: '', value: '#000000', available: true }],
-          sizes: product.sizes || ['One Size'],
-          reviews: product.reviews?.length > 0 ? product.reviews : [{
-            id: 1,
-            user: '',
-            rating: 0,
-            date: '',
-            title: '',
-            comment: '',
-            verified: true,
-            helpful: 0
-          }]
+   useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${import.meta.env.VITE_BASE_API_URI}/product-detail?id=${id}`)
+      .then((res) => {
+        setFormData(res.data);
+        console.log('products detail data', res.data)
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setSnackbar({
+          open: true,
+          message: "Failed to load products.",
+          severity: "error",
         });
-
-        // Set existing images for display
-        setExistingImages(product.images || []);
-        
-      } catch (error) {
-        console.error('Error fetching product:', error);
-        setMessage('Error loading product data. Please try again.');
-        setMessageType('error');
-      } finally {
-        setFetchLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchProduct();
-    }
+      });
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -184,80 +117,11 @@ const EditProduct = () => {
     }));
   };
 
-  const handleImageUpload = (event) => {
-    const files = Array.from(event.target.files);
-    
-    if (files.length === 0) return;
+  
 
-    // Validate file types
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    const invalidFiles = files.filter(file => !validTypes.includes(file.type));
-    
-    if (invalidFiles.length > 0) {
-      setMessage('Please select only image files (JPEG, PNG, GIF, WebP)');
-      setMessageType('error');
-      return;
-    }
+  
 
-    // Validate file sizes (max 5MB per file)
-    // const maxSize = 5 * 1024 * 1024; // 5MB
-    // const oversizedFiles = files.filter(file => file.size > maxSize);
-    
-    // if (oversizedFiles.length > 0) {
-    //   setMessage('Please select images smaller than 5MB');
-    //   setMessageType('error');
-    //   return;
-    // }
 
-    // Add new files to existing ones
-    const newSelectedImages = [...selectedImages, ...files];
-    setSelectedImages(newSelectedImages);
-
-    // Create previews for new files
-    const newPreviews = [];
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        newPreviews.push({
-          file: file,
-          url: e.target.result,
-          name: file.name,
-          isNew: true
-        });
-        
-        if (newPreviews.length === files.length) {
-          setImagePreviews(prev => [...prev, ...newPreviews]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Clear the input
-    event.target.value = '';
-  };
-
-  const removeExistingImage = (index) => {
-    const newExistingImages = existingImages.filter((_, i) => i !== index);
-    setExistingImages(newExistingImages);
-  };
-
-  const removeNewImage = (index) => {
-    const newSelectedImages = selectedImages.filter((_, i) => i !== index);
-    const newPreviews = imagePreviews.filter((_, i) => i !== index);
-    
-    setSelectedImages(newSelectedImages);
-    setImagePreviews(newPreviews);
-  };
-
-  const handleSpecificationChange = (key, value) => {
-    setFormData(prev => ({
-      ...prev,
-      specifications: {
-        ...prev.specifications,
-        [key]: value
-      }
-    }));
-  };
 
   const handleArrayChange = (index, value, arrayName) => {
     setFormData(prev => ({
@@ -289,38 +153,9 @@ const EditProduct = () => {
     }));
   };
 
-  const handleReviewChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      reviews: [{
-        ...prev.reviews[0],
-        [field]: value
-      }]
-    }));
-  };
+  
 
-  const uploadImagesToCloudinary = async (images) => {
-    const uploadedUrls = [];
-    
-    for (const image of images) {
-      const formDataUpload = new FormData();
-      formDataUpload.append('file', image);
-      formDataUpload.append('upload_preset', 'your_upload_preset'); // Replace with your Cloudinary upload preset
-      
-      try {
-        const response = await axios.post(
-          'https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', // Replace with your Cloudinary cloud name
-          formDataUpload
-        );
-        uploadedUrls.push(response.data.secure_url);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        throw new Error('Failed to upload images');
-      }
-    }
-    
-    return uploadedUrls;
-  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -328,49 +163,40 @@ const EditProduct = () => {
     setMessage('');
 
     try {
-      // Upload new images if any
-      let newImageUrls = [];
-      if (selectedImages.length > 0) {
-        newImageUrls = await uploadImagesToCloudinary(selectedImages);
-      }
+      // Only send edited form data, no images
 
-      // Combine existing images with new uploaded images
-      const allImages = [...existingImages, ...newImageUrls];
+      // Send to backend (no image upload)
+      const response = await axios.put(`${import.meta.env.VITE_BASE_API_URI}/edit-product/${id}`, formData);
 
-      const productData = {
-        ...formData,
-        images: allImages,
-        price: parseFloat(formData.price),
-        originalPrice: parseFloat(formData.originalPrice),
-        discount: parseFloat(formData.discount),
-        rating: parseFloat(formData.rating),
-        totalReviews: parseInt(formData.totalReviews),
-        stockCount: parseInt(formData.stockCount),
-        reviews: [{
-          ...formData.reviews[0],
-          id: formData.reviews[0].id || 1,
-          rating: parseInt(formData.reviews[0].rating),
-          helpful: parseInt(formData.reviews[0].helpful)
-        }]
-      };
-
-      const response = await axios.put(`http://localhost:5000/api/products/${id}`, productData);
-      
-      if (response.status === 200) {
+      if (response.status === 201) {
         setMessage('Product updated successfully!');
         setMessageType('success');
-        
-        // Reset new images
-        setSelectedImages([]);
-        setImagePreviews([]);
-        
-        // Optionally redirect after successful update
-        setTimeout(() => {
-          navigate('/products');
-        }, 2000);
+
+        // Reset form
+        setFormData({
+          name: '',
+          brand: '',
+          price: '',
+          originalPrice: '',
+          discount: '',
+          rating: '',
+          totalReviews: '',
+          category: '',
+          subcategory: '',
+          inStock: true,
+          stockCount: '',
+          sku: '',
+          description: '',
+          features: [''],
+         
+          colors: [{ name: '', value: '#000000', available: true }],
+          sizes: ['One Size'],
+        });
       }
+      setMessageType('success');
+      setMessage('Product successfully updated');
     } catch (error) {
-      console.error('Error updating product:', error);
+      console.error('front-end Error updating product:', error);
       setMessage('Error updating product. Please try again.');
       setMessageType('error');
     } finally {
@@ -380,7 +206,7 @@ const EditProduct = () => {
 
   if (!fetchLoading) {
     return (
-      <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 }}}>
         <Paper sx={{ p: 3, borderRadius: 3 }}>
           <Skeleton variant="text" width="60%" height={60} sx={{ mb: 2 }} />
           <Skeleton variant="text" width="40%" height={40} sx={{ mb: 4 }} />
@@ -397,7 +223,7 @@ const EditProduct = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 }, marginBottom:'200px'  }}>
       {/* Header */}
       <Paper 
         elevation={3} 
@@ -560,7 +386,7 @@ const EditProduct = () => {
             
             <Grid container spacing={3}>
               <Grid item size={{xl:3, md:4, sm:6, xs:12}}>
-                <FormControl fullWidth>
+                <FormControl fullWidth className='text-start'>
                   <InputLabel>Category</InputLabel>
                   <Select
                     name="category"
@@ -578,7 +404,7 @@ const EditProduct = () => {
               </Grid>
               
               <Grid item size={{xl:3, md:4, sm:6, xs:12}}>
-                <FormControl fullWidth>
+                <FormControl fullWidth className='text-start'>
                   <InputLabel>Subcategory</InputLabel>
                   <Select
                     name="subcategory"
@@ -650,149 +476,7 @@ const EditProduct = () => {
           </CardContent>
         </Card>
 
-        {/* Images Management */}
-        <Card sx={{ mb: 3, borderRadius: 3 }}>
-          <CardContent sx={{ p: { xs: 2, md: 3 } }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-              <CloudUploadIcon className='text-purple-400' sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight="bold">
-                Product Images
-              </Typography>
-            </Box>
-            
-            {/* Existing Images */}
-            {existingImages.length > 0 && (
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2 }}>
-                  Current Images ({existingImages.length})
-                </Typography>
-                <Grid container spacing={2}>
-                  {existingImages.map((imageUrl, index) => (
-                    <Grid item xs={6} sm={4} md={3} key={index}>
-                      <Card sx={{ position: 'relative', borderRadius: 2 }}>
-                        <CardMedia
-                          component="img"
-                          height="150"
-                          image={imageUrl}
-                          alt={`Product image ${index + 1}`}
-                          sx={{ objectFit: 'cover' }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            top: 8,
-                            right: 8,
-                            backgroundColor: 'rgba(0,0,0,0.7)',
-                            borderRadius: '50%',
-                            p: 0.5
-                          }}
-                        >
-                          <IconButton
-                            size="small"
-                            onClick={() => removeExistingImage(index)}
-                            sx={{ color: 'white', p: 0.5 }}
-                          >
-                            <CloseIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            )}
-
-            {/* Upload New Images */}
-            <Box sx={{ mb: 3 }}>
-              <input
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="image-upload"
-                multiple
-                type="file"
-                onChange={handleImageUpload}
-              />
-              <label htmlFor="image-upload">
-                <Button
-                  variant="outlined"
-                  component="span"
-                  startIcon={<PhotoCameraIcon />}
-                  sx={{
-                    borderStyle: 'dashed',
-                    borderWidth: 2,
-                    py: 2,
-                    px: 4,
-                    borderRadius: 2,
-                    '&:hover': {
-                      borderStyle: 'dashed',
-                      borderWidth: 2,
-                    }
-                  }}
-                >
-                  Add More Images
-                </Button>
-              </label>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                Select additional images (JPEG, PNG, GIF, WebP) - Max 5MB each
-              </Typography>
-            </Box>
-
-            {/* New Image Previews */}
-            {imagePreviews.length > 0 && (
-              <Box>
-                <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2 }}>
-                  New Images ({imagePreviews.length})
-                </Typography>
-                <Grid container spacing={2}>
-                  {imagePreviews.map((preview, index) => (
-                    <Grid item xs={6} sm={4} md={3} key={index}>
-                      <Card sx={{ position: 'relative', borderRadius: 2 }}>
-                        <CardMedia
-                          component="img"
-                          height="150"
-                          image={preview.url}
-                          alt={preview.name}
-                          sx={{ objectFit: 'cover' }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            top: 8,
-                            right: 8,
-                            backgroundColor: 'rgba(0,0,0,0.7)',
-                            borderRadius: '50%',
-                            p: 0.5
-                          }}
-                        >
-                          <IconButton
-                            size="small"
-                            onClick={() => removeNewImage(index)}
-                            sx={{ color: 'white', p: 0.5 }}
-                          >
-                            <CloseIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                        <Box sx={{ p: 1 }}>
-                          <Typography 
-                            variant="caption" 
-                            sx={{ 
-                              display: 'block',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap'
-                            }}
-                          >
-                            {preview.name}
-                          </Typography>
-                        </Box>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            )}
-          </CardContent>
-        </Card>
+    
 
         {/* Features */}
         <Card sx={{ mb: 3, borderRadius: 3 }}>
@@ -837,28 +521,7 @@ const EditProduct = () => {
           </CardContent>
         </Card>
 
-        {/* Specifications */}
-        <Card sx={{ mb: 3, borderRadius: 3 }}>
-          <CardContent sx={{ p: { xs: 2, md: 3 } }}>
-            <Typography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
-              Specifications
-            </Typography>
-            
-            <Grid container spacing={3}>
-              {Object.entries(formData.specifications).map(([key, value]) => (
-                <Grid item size={{xl:3, md:4, sm:6, xs:12}} key={key}>
-                  <TextField
-                    fullWidth
-                    label={key}
-                    value={value}
-                    onChange={(e) => handleSpecificationChange(key, e.target.value)}
-                    variant="outlined"
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </CardContent>
-        </Card>
+       
 
         {/* Colors */}
         <Card sx={{ mb: 3, borderRadius: 3 }}>
@@ -978,12 +641,12 @@ const EditProduct = () => {
               </Grid>
             </Grid>
 
-            <Divider sx={{ my: 3 }} />
+            {/* <Divider sx={{ my: 3 }} />
             
             <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 2 }}>
               Sample Review
-            </Typography>
-            <Grid container spacing={3}>
+            </Typography> */}
+            {/* <Grid container spacing={3}>
               <Grid item size={{xl:3, md:4, sm:6, xs:12}}>
                 <TextField
                   fullWidth
@@ -1045,7 +708,7 @@ const EditProduct = () => {
                   variant="outlined"
                 />
               </Grid>
-            </Grid>
+            </Grid> */}
           </CardContent>
         </Card>
 
@@ -1064,6 +727,7 @@ const EditProduct = () => {
           >
             Cancel
           </Button>
+          
           
           <Button
             type="submit"

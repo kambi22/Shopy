@@ -7,12 +7,13 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        background: "linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%)",
+        background: "linear-gradient(90deg, #fbc2eb 0%, #a18cd1 100%)",
         color: "#fff",
         padding: 4,
         position: "relative",
         bottom: 0,
         width: "100%",
+    
       }}
     >
       <style>
@@ -78,7 +79,7 @@ const Footer = () => {
             Contact Us
           </Typography>
           <Typography variant="body2">Email: support@shopy.com</Typography>
-          <Typography variant="body2">Phone: +1 234 567 890</Typography>
+          <Typography variant="body2">Phone: +91 77400-36662</Typography>
         </Grid>
       </Grid>
       <Box textAlign="center" mt={4} fontSize="0.9rem" opacity={0.8}>

@@ -1,3 +1,4 @@
+
 export const sampleProducts = [
   {
     id: 1,
@@ -121,7 +122,105 @@ export const sampleProducts = [
   }
 ];
 
-
+export const sampleDetailedProduct = {
+    id: 1,
+    name: "Premium Wireless Bluetooth Headphones with Active Noise Cancellation",
+    brand: "TechSound Pro",
+    price: 199.99,
+    originalPrice: 299.99,
+    discount: 33,
+    images: [
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&h=600&fit=crop"
+    ],
+    rating: 4.6,
+    totalReviews: 1247,
+    category: "Electronics",
+    subcategory: "Audio",
+    inStock: true,
+    stockCount: 23,
+    sku: "TSP-WBH-001",
+    description: "Experience premium audio quality with our flagship wireless headphones featuring advanced active noise cancellation technology. Perfect for music lovers, professionals, and travelers who demand the best in audio performance.",
+    features: [
+      "Active Noise Cancellation (ANC) technology",
+      "40-hour battery life with ANC off",
+      "Quick charge: 10 minutes = 3 hours playback",
+      "Premium leather ear cushions",
+      "Bluetooth 5.2 connectivity",
+      "Built-in microphone for calls",
+      "Foldable design for portability",
+      "Compatible with voice assistants"
+    ],
+    specifications: {
+      "Driver Size": "40mm",
+      "Frequency Response": "20Hz - 20kHz",
+      "Impedance": "32 Ohms",
+      "Battery Life": "40 hours (ANC off), 30 hours (ANC on)",
+      "Charging Time": "2 hours",
+      "Weight": "250g",
+      "Connectivity": "Bluetooth 5.2, 3.5mm jack",
+      "Warranty": "2 years"
+    },
+    colors: [
+      { name: "Midnight Black", value: "#000000", available: true },
+      { name: "Silver Gray", value: "#C0C0C0", available: true },
+      { name: "Rose Gold", value: "#E8B4B8", available: false }
+    ],
+    sizes: ["One Size"],
+    reviews: [
+      {
+        id: 1,
+        user: "John D.",
+        rating: 5,
+        date: "2024-01-15",
+        title: "Excellent sound quality!",
+        comment: "These headphones exceeded my expectations. The noise cancellation is fantastic and the battery life is amazing.",
+        verified: true,
+        helpful: 23
+      },
+      {
+        id: 2,
+        user: "Sarah M.",
+        rating: 4,
+        date: "2024-01-10",
+        title: "Great for travel",
+        comment: "Perfect for long flights. Comfortable to wear for hours and the ANC really works well.",
+        verified: true,
+        helpful: 18
+      },
+      {
+        id: 3,
+        user: "Mike R.",
+        rating: 5,
+        date: "2024-01-08",
+        title: "Worth every penny",
+        comment: "Premium build quality and incredible sound. The quick charge feature is a lifesaver.",
+        verified: false,
+        helpful: 12
+      }
+    ],
+    relatedProducts: [
+      {
+        id: 2,
+        name: "Wireless Earbuds Pro",
+        brand: "TechSound",
+        price: 129.99,
+        image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=300&h=300&fit=crop",
+        rating: 4.4
+      },
+      {
+        id: 3,
+        name: "Bluetooth Speaker",
+        brand: "TechSound",
+        price: 79.99,
+        image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=300&fit=crop",
+        rating: 4.2
+      }
+    ]
+  };
 
 export const heroSlides = [
   {
@@ -129,7 +228,7 @@ export const heroSlides = [
     title: "Summer Sale",
     subtitle: "Up to 50% Off",
     description: "Discover amazing deals on your favorite products",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=600&fit=crop",
+    image: 'https://res.cloudinary.com/dr5ziuzrg/image/upload/v1751801691/2148559696_jhr8rw.jpg',
     buttonText: "Shop Now",
     buttonLink: "/sale"
   },
@@ -138,8 +237,19 @@ export const heroSlides = [
     title: "New Arrivals",
     subtitle: "Fresh & Trendy",
     description: "Check out the latest products in our collection",
-    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&h=600&fit=crop",
+    image: 'https://res.cloudinary.com/dr5ziuzrg/image/upload/v1751800446/banner2_h4bmu2.jpg',
     buttonText: "Explore",
     buttonLink: "/new-arrivals"
-  }
+  },
+  {
+    id: 2,
+    title: "New Arrivals",
+    subtitle: "Fresh & Trendy",
+    description: "Check out the latest products in our collection",
+    image: 'https://res.cloudinary.com/dr5ziuzrg/image/upload/v1751801578/118763_epxhhq.jpg',
+    buttonText: "Explore",
+    buttonLink: "/new-arrivals"
+  },
+
+  
 ];

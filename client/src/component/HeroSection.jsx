@@ -48,7 +48,7 @@ const HeroSection = ({ slides }) => {
         alignItems: 'center',
         justifyContent:'start',
         color: 'white',
-        transition: 'background-image 0.5s ease-in-out',
+
         
         
       }}
@@ -67,7 +67,7 @@ const HeroSection = ({ slides }) => {
               fontSize: { xs: '2rem', md: '3.5rem' },
               fontWeight: 700,
               mb: 1,
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+   
             }}
           >
             {currentSlideData.title}
@@ -96,25 +96,8 @@ const HeroSection = ({ slides }) => {
             {currentSlideData.description}
           </Typography>
           
-          <Button
-            variant="contained"
-            size="large"
-            endIcon={<ArrowForwardIos />}
-            sx={{
-              px: 4,
-              py: 1.5,
-              fontSize: '1.1rem',
-              borderRadius: 2,
-              backgroundColor: theme.palette.primary.main,
-              '&:hover': {
-                backgroundColor: theme.palette.primary.dark,
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease'
-            }}
-          >
-            {currentSlideData.buttonText}
-          </Button>
+          <button type="button" className="text-white text-2xl h-12 w-30 bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 shadow-lg shadow-pink-500/50 dark:shadow-lg dark:shadow-pink-800/80 font-bold rounded-lg  px-5 py-3 text-center me-5 mb-2">
+          {currentSlideData.buttonText}</button>
         </Box>
       </Container>
 

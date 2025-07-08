@@ -22,13 +22,15 @@ import { useMediaQuery } from '@mui/material';
 
 
 const categories = [
-  { label: 'Clothes', icon: <CheckroomIcon />, path: '/products?cat=clothes' },
-  { label: 'Fashion', icon: <LocalMallIcon />, path: '/products?cat=fashion' },
-  { label: 'Electronics', icon: <DevicesIcon />, path: '/products?cat=electronics' },
-  { label: 'Home Stuff', icon: <KitchenIcon />, path: '/products?cat=home' },
-  { label: 'Sports', icon: <SportsSoccerIcon />, path: '/products?cat=sports' },
-  { label: 'Kids', icon: <ChildCareIcon />, path: '/products?cat=kids' },
-  { label: 'Books', icon: <BookIcon />, path: '/products?cat=books' },
+{ label: 'Clothes', icon: <CheckroomIcon />, path: '/?category=Clothing' },
+  { label: 'Electronics', icon: <DevicesIcon />, path: '/?category=Electronics' },
+  { label: 'Home Stuff', icon: <KitchenIcon />, path: '/?category=Home' },
+  { label: 'Sports', icon: <SportsSoccerIcon />, path: '/?category=Sports' },
+  { label: 'Kids', icon: <ChildCareIcon />, path: '/?category=Kids' },
+  { label: 'Books', icon: <BookIcon />, path: '/?category=Books' },
+  { label: 'Fashion', icon: <LocalMallIcon />, path: '/?category=Fashion' },
+
+  
 ];
 export default function Sidebar() {
   const [unCollapse, setunCollapse] = useState(false);
