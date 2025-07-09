@@ -259,14 +259,38 @@ router.put('/edit-product/:id', async (req, res) => {
 router.delete('/delete-product/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('datated id:', id)
-    const deletedProduct = await Product.findByIdAndDelete(id);
+    console.log('deleted id:', id);
 
-    if (!deletedProduct) {
+    // Find the product first to get image URLs
+    const product = await Product.findById(id);
+    if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    res.status(200).json({ message: "Product deleted successfully", product: deletedProduct });
+    // Delete images from Cloudinary
+    if (Array.isArray(product.images)) {
+      // Extract public_id from each image URL
+      const deletePromises = product.images.map(async (imgUrl) => {
+        try {
+          // Cloudinary URLs are like: https://res.cloudinary.com/<cloud_name>/image/upload/v<version>/<public_id>.<ext>
+          // Extract public_id (between /upload/ and .ext)
+          const matches = imgUrl.match(/\/upload\/(?:v\d+\/)?([^\.\/]+)(?:\.[a-zA-Z0-9]+)?$/);
+          const publicId = matches && matches[1] ? matches[1] : null;
+          if (publicId) {
+            await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+          }
+        } catch (err) {
+          // Log and continue
+          console.error('Cloudinary image delete error:', err.message);
+        }
+      });
+      await Promise.all(deletePromises);
+    }
+
+    // Delete product from DB
+    const deletedProduct = await Product.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Product and images deleted successfully", product: deletedProduct });
   } catch (error) {
     console.error("Error deleting product:", error);
     res.status(500).json({ message: "Failed to delete product", error: error.message });

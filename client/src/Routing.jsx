@@ -1,7 +1,6 @@
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router";
 import Home from "./pages/Home";
-import Products from "./pages/Products";
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
 import DeleteProduct from "./pages/DeleteProducts";
@@ -31,7 +30,6 @@ const Routing = (props) => {
                     <Routes>
                         <Route path="/" element={<MainLayout />}>
                             <Route path="/" index element={<Home />} />
-                            <Route path="/products" element={<Products />} />
                             <Route element={<ProtectedRoute />}>
                                 <Route path="/add-product" element={<AddProduct />} />
                                 <Route path="/edit-product/:id" element={<EditProduct />} />
