@@ -3,7 +3,6 @@ require('../connection')
 const express = require('express');
 const router = express.Router();
 const Product = require('../schema/Product');
-const Simple = require('../schema/Simple')
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2
 const streamifier = require('streamifier');
@@ -61,14 +60,15 @@ router.post('/add-product', upload.array('images'), async (req, res) => {
     if (!files || files.length === 0) {
       return res.status(400).json({ message: 'No images provided' });
     }
-
+    // Sanitize category for Cloudinary folder
+    const safeCategory = (category || "products").replace(/[^a-zA-Z0-9-_]/g, "-");
     // Helper to upload a single image buffer to Cloudinary
     const uploadToCloudinary = (fileBuffer) => {
       return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
             resource_type: 'image',
-            folder: name || "products",
+            folder: safeCategory || "products",
             timeout: 120000 // 2 minutes
           },
           (error, result) => {
@@ -89,7 +89,7 @@ router.post('/add-product', upload.array('images'), async (req, res) => {
     let parsedFeatures = features;
     let parsedColors = colors;
     let parsedSizes = sizes;
- 
+
 
     try {
       if (typeof features === "string") parsedFeatures = JSON.parse(features);
@@ -131,25 +131,7 @@ router.post('/add-product', upload.array('images'), async (req, res) => {
   }
 });
 
-router.post('/simple', async(req, res)=>{
-try {
-    const {name, email, password} = req.body;
 
-    console.log(name, email, password)
-
-  const SimpleData = new Simple({
-    name,
-    email,
-    password
-  });
-
-  await SimpleData.save();
-  res.status(201).json({message:'simple data successfully sent to the database'})
-} catch (error) {
-  console.error("simple data:", error);
-    res.status(500).json({ message: "simple data error", error: error.message });
-}
-})
 
 router.get('/all-products', async (req, res) => {
   try {
@@ -174,7 +156,7 @@ router.get('/product-detail', async (req, res) => {
       }
       return res.status(200).json(product);
     }
- 
+
   } catch (error) {
     console.error("Error fetching product(s):", error);
     res.status(500).json({ message: "Failed to fetch product(s)", error: error.message });
@@ -220,8 +202,6 @@ router.put('/edit-product/:id', async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
       {
-        marchantName,
-        marchantEmail,
         name,
         brand,
         price,
@@ -301,8 +281,8 @@ router.delete('/delete-product/:id', async (req, res) => {
 router.get("/marchant-product-list/:email", async (req, res) => {
   try {
     const userEmail = req.params.email;
-  if(!userEmail){throw console.error('user email not found')}
-  console.log('user Email', userEmail)
+    if (!userEmail) { throw console.error('user email not found') }
+    console.log('user Email', userEmail)
     const products = await Product.find({ marchantEmail: userEmail });
     res.status(200).json(products);
   } catch (error) {
@@ -315,8 +295,8 @@ router.get("/marchant-product-list/:email", async (req, res) => {
 router.get("/product-category/:category", async (req, res) => {
   try {
     const category = req.params.category;
-  if(!category){throw console.error('Category not exist')}
-  console.log('Product category', category)
+    if (!category) { throw console.error('Category not exist') }
+    console.log('Product category', category)
     const products = await Product.find({ category: category });
     res.status(200).json(products);
   } catch (error) {
@@ -328,7 +308,7 @@ router.get("/product-category/:category", async (req, res) => {
 
 router.get('/search', async (req, res) => {
   const { q } = req.query;
-  console.log('query name is:',q)
+  console.log('query name is:', q)
   if (!q) return res.status(400).json({ error: 'Missing query param ?q=' });
 
   try {
@@ -342,7 +322,7 @@ router.get('/search', async (req, res) => {
       ]
     });
 
-        res.status(200).json(results);
+    res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ error: 'Server error', details: err.message });
   }

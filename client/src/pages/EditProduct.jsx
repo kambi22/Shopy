@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {categories, subcategories} from '../data/sampleData'
+
 import {
   Box,
   Container,
@@ -78,16 +80,10 @@ const EditProduct = () => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('success');
 
-  const categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Beauty', 'Automotive'];
-  const subcategories = {
-    'Electronics': ['Headphones', 'Smartphones', 'Laptops', 'Tablets', 'Cameras'],
-    'Clothing': ['Men', 'Women', 'Kids', 'Accessories'],
-    'Books': ['Fiction', 'Non-Fiction', 'Educational', 'Comics'],
-    'Home & Garden': ['Furniture', 'Decor', 'Kitchen', 'Garden'],
-    'Sports': ['Fitness', 'Outdoor', 'Team Sports', 'Water Sports'],
-    'Beauty': ['Skincare', 'Makeup', 'Hair Care', 'Fragrance'],
-    'Automotive': ['Parts', 'Accessories', 'Tools', 'Care']
-  };
+  
+
+
+
 
   // Fetch product data on component mount
    useEffect(() => {

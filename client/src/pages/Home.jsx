@@ -90,7 +90,7 @@ const HomePage = () => {
 
         console.log("all products", res.data)
         // Optionally, filter featured and new products here
-        setFeaturedProducts(res.data.slice(0, 4)); // Example: first 4 as featured
+        setFeaturedProducts(res.data); // Example: first 4 as featured
         setNewProducts(res.data.slice(-4)); // Example: last 4 as new arrivals
         setLoading(false);
       })

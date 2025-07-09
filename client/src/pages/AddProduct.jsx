@@ -45,7 +45,7 @@ import {
 } from '@mui/icons-material';
 import { getAuth } from 'firebase/auth';
 import app from '../firebaseConfig';
-
+import {categories, subcategories} from '../data/sampleData'
 const AddProduct = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -91,16 +91,7 @@ const AddProduct = () => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('success');
 
-  const categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Beauty', 'Automotive'];
-  const subcategories = {
-    'Electronics': ['Headphones', 'Smartphones', 'Laptops', 'Tablets', 'Cameras'],
-    'Clothing': ['Men', 'Women', 'Kids', 'Accessories'],
-    'Books': ['Fiction', 'Non-Fiction', 'Educational', 'Comics'],
-    'Home & Garden': ['Furniture', 'Decor', 'Kitchen', 'Garden'],
-    'Sports': ['Fitness', 'Outdoor', 'Team Sports', 'Water Sports'],
-    'Beauty': ['Skincare', 'Makeup', 'Hair Care', 'Fragrance'],
-    'Automotive': ['Parts', 'Accessories', 'Tools', 'Care']
-  };
+
 
   
 

@@ -1,4 +1,16 @@
 
+export const categories = ['Electronics', 'Clothing', 'Books', 'Home', 'Kids', 'Sports', 'Fashion', 'Automotive'];
+  export const subcategories = {
+    'Electronics': ['Headphones', 'Smartphones', 'Laptops', 'Tablets', 'Cameras'],
+    'Clothing': ['Men', 'Women', 'Kids', 'Accessories'],
+    'Books': ['Fiction', 'Non-Fiction', 'Educational', 'Comics'],
+    'Home': ['Furniture', 'Decor', 'Kitchen', 'Garden'],
+    'Sports': ['Fitness', 'Outdoor', 'Team Sports', 'Water Sports'],
+    'Fashion': ['Skincare', 'Makeup', 'Hair Care', 'Fragrance'],
+    'Kids': ['Toyes'],
+    'Automotive': ['Parts', 'Accessories', 'Tools', 'Care']
+  };
+
 export const sampleProducts = [
   {
     id: 1,

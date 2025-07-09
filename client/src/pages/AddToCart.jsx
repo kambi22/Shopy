@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import {
   Box,
   Typography,
@@ -119,9 +120,20 @@ const AddToCartPage = () => {
            
           </Paper>
       {cartProducts.length === 0 ? (
+        <div className="0 h-screen">
+    
+          {/* https://lottie.host/433b563b-e2c1-43f0-8793-940223283b89/bPx7XdNkiV.lottie */}
+           <DotLottieReact
+           className=" h-110 w-full " 
+              src="https://lottie.host/433b563b-e2c1-43f0-8793-940223283b89/bPx7XdNkiV.lottie"
+              loop
+              autoplay
+            />
         <Typography variant="h6" color="text.secondary">
           Your cart is empty.
         </Typography>
+       
+        </div>
       ) : (
         <Grid container spacing={4} sx={{marginTop:'80px'}}>
           <Grid item size={{xl:6, md:6, sm:12, xs:12}} sx={{ mb: 4 }}>

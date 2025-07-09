@@ -1,24 +1,20 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const PrductesRoute = require('./routes/PrductesRoute')
+const ProductRoute = require('./routes/ProductRoute');
 
 app.use(express.json());
 app.use(cors({
-  origin: ['https://shopy-teal.vercel.app/', 'http://localhost:5173'],
+  origin: ['https://shopy-teal.vercel.app', 'http://localhost:5173'], // Remove trailing slash
   methods: ["POST", "GET", "PUT", "DELETE"],
   credentials: true
 }));
 
-// Mount the route at /api/products
-app.use('/', PrductesRoute);
+app.use('/', ProductRoute);
 
-// Default route
 app.get('/', (req, res) => {
   res.send('✅ Server is up and running!');
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+// Export the Express app for Vercel (no app.listen() needed)
+module.exports = app;
