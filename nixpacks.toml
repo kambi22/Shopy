@@ -1,12 +1,8 @@
-[phases.setup]
-cmds = [
-    "cd server && npm install",
-]
+[build.environment]
+NODE_VERSION = "22.x"  # Explicitly sets Node.js 22
 
-[phases.build]
-cmds = [
-    "cd server && npm run build",
-]
+[phases.setup]
+cmds = ["npm install"]  # No need for `cd server` if root is set correctly
 
 [start]
-cmd = "cd server && npm start"
+cmd = "npm start"
