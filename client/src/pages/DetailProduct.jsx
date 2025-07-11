@@ -500,16 +500,16 @@ const DetailProduct = () => {
 
         {/* Description Tab */}
         <TabPanel value={tabValue} index={0}>
-          <Typography variant="body1" paragraph>
+          <Typography variant="body1" className='text-black text-start' paragraph>
             {product.description}
           </Typography>
-          <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
+          <Typography variant="h6" className='text-black text-center' sx={{ mt: 3, mb: 2 }}>
             Key Features:
           </Typography>
           <List>
             {product.features.map((feature, index) => (
               <ListItem key={index} sx={{ py: 0.5 }}>
-                <ListItemText primary={`• ${feature}`} />
+                <ListItemText className='text-black text-start'  primary={`• ${feature}`} />
               </ListItem>
             ))}
           </List>
